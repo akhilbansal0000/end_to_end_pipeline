@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   spark-master:
     build: .
@@ -14,6 +12,7 @@ services:
       - spark-network
     volumes:
       - ./jobs:/jobs  # <-- This mounts your local jobs/ folder to /jobs inside the container
+      - data_volume:/data # <-- Use named volume for /data
 
   spark-worker-1:
     build: .
@@ -46,3 +45,6 @@ services:
 networks:
   spark-network:
     driver: bridge
+
+volumes:
+  data_volume: # <-- Define the named volume
