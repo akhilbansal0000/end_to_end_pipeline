@@ -3,8 +3,6 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -19,7 +17,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/my-image-name
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/my-first-docker-name
           docker build -t $IMAGE_NAME:latest .
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$(date +%s)
           docker push $IMAGE_NAME --all-tags
