@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   spark-master:
     build: .
@@ -19,6 +21,11 @@ services:
     hostname: spark-worker-1
     depends_on:
       - spark-master
+    environment:
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2g
+    ports:
+      - "8081:8081"  # Worker 1 UI
     networks:
       - spark-network
 
@@ -28,6 +35,11 @@ services:
     hostname: spark-worker-2
     depends_on:
       - spark-master
+    environment:
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2g
+    ports:
+      - "8082:8081"  # Worker 2 UI, avoid conflicts
     networks:
       - spark-network
 

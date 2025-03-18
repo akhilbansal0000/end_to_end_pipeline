@@ -1,10 +1,13 @@
 #!/bin/bash
 
 if [[ "$HOSTNAME" == "spark-master" ]]; then
-    # Start Spark Master
+    echo "Starting Spark Master..."
     $SPARK_HOME/sbin/start-master.sh -h 0.0.0.0
+
+    echo "Starting Spark Worker on Master..."
+    $SPARK_HOME/sbin/start-worker.sh spark://spark-master:7077
 else
-    # Start Spark Worker
+    echo "Starting Spark Worker..."
     $SPARK_HOME/sbin/start-worker.sh spark://spark-master:7077
 fi
 
