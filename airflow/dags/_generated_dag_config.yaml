@@ -1,0 +1,71 @@
+default:
+  catchup: false
+  default_args:
+    depend_on_past: false
+    owner: airflow
+    retries: 1
+    retry_delay_sec: 300
+    start_date: '2025-04-04'
+  description: Auto-generated Spark job DAG
+  is_paused_upon_creation: false
+  schedule_interval: '@once'
+spark_example_pyspark_job_dag:
+  tasks:
+    run_example_pyspark_job:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/example_pyspark_job.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_friends-by-age_dag:
+  tasks:
+    run_friends-by-age:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/friends-by-age.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_max-temperatures_dag:
+  tasks:
+    run_max-temperatures:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/max-temperatures.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_min-temperatures_dag:
+  tasks:
+    run_min-temperatures:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/min-temperatures.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_ratings-counter_dag:
+  tasks:
+    run_ratings-counter:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/ratings-counter.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_total-spent-by-customer-sorted_dag:
+  tasks:
+    run_total-spent-by-customer-sorted:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/total-spent-by-customer-sorted.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_total-spent-by-customer_dag:
+  tasks:
+    run_total-spent-by-customer:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/total-spent-by-customer.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_word-count-better-sorted_dag:
+  tasks:
+    run_word-count-better-sorted:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/word-count-better-sorted.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_word-count-better_dag:
+  tasks:
+    run_word-count-better:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/word-count-better.py
+      operator: airflow.operators.bash_operator.BashOperator
+spark_word-count_dag:
+  tasks:
+    run_word-count:
+      bash_command: docker exec spark-master /opt/spark/bin/spark-submit --master
+        spark://spark-master:7077 /jobs/word-count.py
+      operator: airflow.operators.bash_operator.BashOperator

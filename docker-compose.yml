@@ -112,7 +112,10 @@ services:
       - DYNAMIC_CONFIG_ENABLED=true
 
   airflow-webserver:
-    image: apache/airflow:2.9.1
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
+    image: custom-airflow:latest
     container_name: airflow-webserver
     restart: always
     depends_on:
@@ -128,6 +131,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/jobs
     ports:
       - "8088:8080"
     networks:
@@ -135,7 +139,10 @@ services:
     command: webserver
 
   airflow-scheduler:
-    image: apache/airflow:2.9.1
+    build: 
+      context: .
+      dockerfile: airflow/Dockerfile
+    image: custom-airflow:latest
     container_name: airflow-scheduler
     restart: always
     depends_on:
@@ -149,6 +156,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/jobs
     networks:
       - spark-network
     command: scheduler
@@ -167,7 +175,10 @@ services:
       - spark-network
 
   airflow-init:
-    image: apache/airflow:2.9.1
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
+    image: custom-airflow:latest
     container_name: airflow-init
     entrypoint: >
       bash -c "airflow db migrate && airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com"
@@ -179,6 +190,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/jobs
     depends_on:
       - airflow-postgres
     networks:
