@@ -124,14 +124,15 @@ services:
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
-      - AIRFLOW__CORE__FERNET_KEY=your_fernet_key_here
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - PYTHONWARNINGS=ignore::DeprecationWarning
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jobs:/jobs
+      - ./airflow/scripts:/opt/airflow/scripts
     ports:
       - "8088:8080"
     networks:
@@ -150,13 +151,14 @@ services:
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
-      - AIRFLOW__CORE__FERNET_KEY=your_fernet_key_here
+      - PYTHONWARNINGS=ignore::DeprecationWarning
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jobs:/jobs
+      - ./airflow/scripts:/opt/airflow/scripts
     networks:
       - spark-network
     command: scheduler
@@ -181,16 +183,21 @@ services:
     image: custom-airflow:latest
     container_name: airflow-init
     entrypoint: >
-      bash -c "airflow db migrate && airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com"
+      bash -c "
+        python /opt/airflow/scripts/generate_dag_config.py &&
+        airflow db init &&
+        airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin  --email akhilbansal0000@gmail.com"
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
+      - PYTHONWARNINGS=ignore::DeprecationWarning
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jobs:/jobs
+      - ./airflow/scripts:/opt/airflow/scripts
     depends_on:
       - airflow-postgres
     networks:
